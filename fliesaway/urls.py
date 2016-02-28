@@ -15,8 +15,20 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from rest_framework import routers
+from grouptrip import views
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+router.register(r'destinations', views.DestinationViewSet)
+router.register(r'userprofiles', views.UserProfileViewSet)
+router.register(r'trippreference', views.TripPreferenceViewSet)
 
 urlpatterns = [
     url(r'^^grouptrip/', include('grouptrip.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+
 ]

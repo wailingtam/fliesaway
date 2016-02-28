@@ -23,13 +23,24 @@ class UserProfile(models.Model):
         return self.user.username
 
 
-class TripPreferences(models.Model):
+class TripPreference(models.Model):
     trip = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     budget = models.IntegerField(blank=False)
-    weather = models.CharField(max_length=200)
+    WEATHER_CHOICES = (
+        ('SUNNY', 'Sunny'),
+        ('CLOUDY', 'Cloudy'),
+        ('RAINY', 'Rainy'),
+        ('SNOWY', 'Snowy'),
+        ('ANY', 'Any'),
+    )
+    weather = models.CharField(max_length=6,
+        choices=WEATHER_CHOICES,
+        default = 'ANY')
     duration = models.IntegerField(blank=False)
+
+    unique_together = ('trip', 'user')
 
     def __str__(self):
         return self.trip.name + "-" + self.user.username
